@@ -627,6 +627,8 @@ static bool enum_hub_clear_reset1_complete(uint8_t dev_addr, tusb_control_reques
   (void) dev_addr; (void) request;
   TU_ASSERT(XFER_RESULT_SUCCESS == result);
 
+  osal_task_delay(RESET_DELAY);
+
   enum_request_set_addr();
 
   // done with hub, waiting for next data on status pipe
@@ -770,6 +772,9 @@ static bool enum_get_addr0_device_desc_complete(uint8_t dev_addr, tusb_control_r
 #if CFG_TUH_HUB
   else
   {
+#if defined(PICO_BOARD)
+    enum_request_set_addr();
+#else
     // after RESET_DELAY the hub_port_reset() already complete
     TU_ASSERT( hub_port_reset(_dev0.hub_addr, _dev0.hub_port, NULL) );
     osal_task_delay(RESET_DELAY);
@@ -777,6 +782,7 @@ static bool enum_get_addr0_device_desc_complete(uint8_t dev_addr, tusb_control_r
     tuh_task(); // FIXME temporarily to clean up port_reset control transfer
 
     TU_ASSERT( hub_port_get_status(_dev0.hub_addr, _dev0.hub_port, _usbh_ctrl_buf, enum_hub_get_status1_complete) );
+#endif
   }
 #endif
 

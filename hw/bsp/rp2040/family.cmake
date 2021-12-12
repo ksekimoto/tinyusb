@@ -46,8 +46,10 @@ if (NOT TARGET _rp2040_family_inclusion_marker)
 
 	set(TINYUSB_DEBUG_LEVEL 0)
 	if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-		message("Compiling TinyUSB with CFG_TUSB_DEBUG=1")
-		set(TINYUSB_DEBUG_LEVEL 1)
+		# message("Compiling TinyUSB with CFG_TUSB_DEBUG=1")
+		# set(TINYUSB_DEBUG_LEVEL 1)
+		message("Compiling TinyUSB with CFG_TUSB_DEBUG=2")
+		set(TINYUSB_DEBUG_LEVEL 2)
 	endif ()
 	
 	target_compile_definitions(tinyusb_common_base INTERFACE
